@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VitalRoute: Re-humanizing Logistics</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ── Reset & Base ── */
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -21,8 +24,8 @@
     --danger: #ef4444;
     --warn: #f59e0b;
     --gradient: linear-gradient(135deg, var(--accent), var(--accent2));
-    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    --font: 'Space Grotesk', 'Trebuchet MS', sans-serif;
+    --mono: 'IBM Plex Mono', 'Cascadia Code', 'Consolas', monospace;
   }
 
   html, body {
@@ -31,18 +34,23 @@
     background: var(--bg-dark);
     color: var(--text);
     overflow: hidden;
+    line-height: 1.45;
   }
 
   /* ── Slide Container ── */
   .deck {
     position: relative;
     width: 100vw; height: 100vh;
+    background:
+      radial-gradient(circle at 8% 12%, rgba(56, 189, 248, .12), transparent 34%),
+      radial-gradient(circle at 86% 84%, rgba(37, 99, 235, .1), transparent 38%),
+      var(--bg-dark);
   }
 
   .slide {
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
-    padding: 48px clamp(28px, 6vw, 84px) 88px;
+    padding: clamp(28px, 4.8vh, 52px) clamp(20px, 5vw, 78px) 90px;
     gap: 12px;
     opacity: 0;
     visibility: hidden;
@@ -83,7 +91,7 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 1320px;
+    max-width: 1200px;
   }
 
   /* ── Scanline overlay ── */
@@ -168,7 +176,7 @@
   }
 
   h1 {
-    font-size: 3.2rem;
+    font-size: clamp(2.15rem, 4.7vw, 3.55rem);
     font-weight: 700;
     background: var(--gradient);
     -webkit-background-clip: text;
@@ -179,7 +187,7 @@
   }
 
   h2 {
-    font-size: 1.9rem;
+    font-size: clamp(1.45rem, 2.75vw, 2.1rem);
     font-weight: 600;
     color: var(--accent);
     margin-bottom: 8px;
@@ -193,9 +201,10 @@
   }
 
   .subtitle {
-    font-size: 1.1rem;
+    font-size: clamp(.98rem, 1.7vw, 1.15rem);
     color: var(--text-dim);
     line-height: 1.55;
+    max-width: 1000px;
   }
 
   .team {
@@ -226,10 +235,11 @@
 
   .card {
     background: var(--bg-card);
-    border: 1px solid rgba(56,189,248,.16);
+    border: 1px solid rgba(56,189,248,.2);
     border-radius: 12px;
     padding: 20px;
     transition: transform .3s, box-shadow .3s, border-color .3s;
+    backdrop-filter: blur(2px);
   }
 
   .card:hover {
@@ -263,7 +273,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px;
-    margin: 14px 0;
+    margin: 16px 0;
   }
 
   .stat-box {
@@ -293,14 +303,15 @@
   /* ── Timeline ── */
   .timeline {
     position: relative;
-    padding-left: 36px;
-    margin-top: 16px;
+    padding-left: 116px;
+    margin-top: 2rem;
+    margin-left: 4rem;
   }
 
   .timeline::before {
     content: '';
     position: absolute;
-    left: 12px; top: 0; bottom: 0;
+    left: 38px; top: 0; bottom: 0;
     width: 2px;
     background: linear-gradient(to bottom, var(--accent), var(--accent2));
   }
@@ -308,7 +319,7 @@
   .timeline-item {
     position: relative;
     margin-bottom: 14px;
-    padding: 14px 18px;
+    padding: 14px 18px 14px 20px;
     background: var(--bg-card);
     border: 1px solid rgba(56,189,248,.16);
     border-radius: 10px;
@@ -322,7 +333,7 @@
   .timeline-item::before {
     content: '';
     position: absolute;
-    left: -30px; top: 18px;
+    left: -84px; top: 0;
     width: 10px; height: 10px;
     border-radius: 50%;
     background: var(--accent);
@@ -330,11 +341,31 @@
     border: 2px solid var(--bg-dark);
   }
 
+  .timeline-item::after {
+    content: attr(data-status);
+    position: absolute;
+    left: -14rem;
+    top: 0;
+    width: 122px;
+    text-align: right;
+    color: var(--text-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  .timeline-item.is-triggered::before { background: var(--warn); box-shadow: 0 0 8px rgba(245,158,11,.7); }
+  .timeline-item.is-arrived::before { background: var(--accent2); box-shadow: 0 0 8px rgba(37,99,235,.7); }
+  .timeline-item.is-recovery::before { background: var(--accent3); box-shadow: 0 0 8px rgba(20,184,166,.7); }
+
   .timeline-time {
     font-family: var(--mono);
     font-size: .82rem;
     color: var(--accent);
-    margin-bottom: 3px;
+    margin-bottom: 4px;
+    letter-spacing: .02em;
   }
 
   .timeline-item p {
@@ -615,12 +646,24 @@
     .title-slide h1 { font-size: 2.4rem; }
     .card-grid.cols-2, .card-grid.cols-3,
     .two-col, .conclusion-grid { grid-template-columns: 1fr; }
-    .stat-row { flex-direction: column; }
+    .stat-row { grid-template-columns: 1fr; }
     .flow { flex-direction: column; }
     .flow-node { width: 100%; }
     .flow-arrow { transform: rotate(90deg); }
     .hero-visual { height: 110px; }
     .seat-diagram { flex-direction: column; }
+    .timeline { padding-left: 0; }
+    .timeline::before { left: 10px; }
+    .timeline-item { padding: 14px 14px 14px 30px; }
+    .timeline-item::before { left: 4px; top: 16px; }
+    .timeline-item::after {
+      left: 30px;
+      top: -16px;
+      width: auto;
+      text-align: left;
+      font-size: .62rem;
+      color: var(--accent);
+    }
   }
 
   .kbd-hint {
@@ -901,27 +944,22 @@
     <div class="two-col fade-up">
       <div class="col">
         <div class="timeline" style="margin-top:0;">
-          <div class="timeline-item">
+          <div class="timeline-item" data-status="Detected">
             <div class="timeline-time">14:00 — On the Road</div>
             <p>Mark hits heavy traffic. He grips the wheel tight <span class="chip cyan">stress ↑</span> and leans on his right hip <span class="chip purple">posture ↓</span>.</p>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item is-triggered" data-status="Triggered">
             <div class="timeline-time">14:05 — In-Cab Alert</div>
             <p>Dashboard prompts: <em style="color:var(--accent);">"Mark, tension detected. Reserved a VitalRoute Pod in 20 miles."</em></p>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item is-arrived" data-status="Arrived">
             <div class="timeline-time">14:30 — Arrival at Stop</div>
             <p>Mark scans his phone at the lounge door. The pod receives his <strong>Recovery Prescription</strong> via NFC.</p>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item is-recovery" data-status="Recovery">
             <div class="timeline-time">14:31 — The Recovery</div>
             <p>The room dims to a calming blue: <em style="color:var(--accent3);">"Welcome, Mark. Let's stretch that right hip."</em></p>
           </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="chart-container" style="margin-top:0;">
-          <canvas id="chartJourney"></canvas>
         </div>
       </div>
     </div>
