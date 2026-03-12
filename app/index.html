@@ -137,41 +137,57 @@
     </header>
 
     <div class="body-map-container">
-      <!-- SVG Body Outline with interactive zones -->
+      <!-- SVG Anatomical Body with interactive zones -->
       <div class="body-visual">
-        <svg viewBox="0 0 200 420" class="body-svg" id="bodySvg">
-          <!-- Head -->
-          <circle cx="100" cy="36" r="24" class="body-part" data-zone="head" fill="rgba(56,189,248,0.15)" stroke="rgba(56,189,248,0.4)"/>
+        <!-- Hover tooltip -->
+        <div class="body-tooltip" id="bodyTooltip">
+          <span class="bt-title"></span>
+          <span class="bt-status"></span>
+          <span class="bt-pressure"></span>
+        </div>
+        <svg viewBox="0 0 220 480" class="body-svg" id="bodySvg">
+          <!-- Head (drawn first so hat overlaps on top) -->
+          <ellipse cx="110" cy="38" rx="22" ry="26" class="body-part" data-zone="head" fill="rgba(96,210,255,0.18)" stroke="rgba(96,210,255,0.5)"/>
+          <!-- Trucker Hat crown — sits on top of head -->
+          <path d="M86 20 Q86 8 110 6 Q134 8 134 20 L134 16 Q130 12 110 10 Q90 12 86 16 Z" fill="rgba(75,138,255,0.5)" stroke="rgba(75,138,255,0.7)" stroke-width="1.2"/>
+          <!-- Hat brim — extends forward from forehead line -->
+          <path d="M80 20 Q82 16 110 14 Q138 16 140 20 Q142 24 138 26 Q134 22 110 20 Q86 22 82 26 Q78 24 80 20 Z" fill="rgba(75,138,255,0.6)" stroke="rgba(75,138,255,0.7)" stroke-width="1.2"/>
+          <!-- Hat front panel patch -->
+          <rect x="103" y="9" width="14" height="7" rx="2" fill="rgba(255,179,64,0.45)" stroke="rgba(255,179,64,0.65)" stroke-width="0.8"/>
           <!-- Neck -->
-          <rect x="90" y="58" width="20" height="16" rx="4" class="body-part" data-zone="neck" fill="rgba(56,189,248,0.12)" stroke="rgba(56,189,248,0.3)"/>
-          <!-- Torso -->
-          <path d="M60 74 L140 74 L148 180 L52 180 Z" rx="8" class="body-part" data-zone="torso" fill="rgba(56,189,248,0.12)" stroke="rgba(56,189,248,0.3)"/>
+          <path d="M100 62 Q100 66 98 70 L122 70 Q120 66 120 62 Z" class="body-part" data-zone="neck" fill="rgba(96,210,255,0.15)" stroke="rgba(96,210,255,0.4)"/>
           <!-- Left Shoulder -->
-          <ellipse cx="48" cy="88" rx="18" ry="12" class="body-part" data-zone="l-shoulder" fill="rgba(56,189,248,0.12)" stroke="rgba(56,189,248,0.3)"/>
+          <path d="M98 70 Q78 68 60 80 Q56 84 58 90 L78 86 Q88 78 98 74 Z" class="body-part" data-zone="l-shoulder" fill="rgba(96,210,255,0.15)" stroke="rgba(96,210,255,0.4)"/>
           <!-- Right Shoulder -->
-          <ellipse cx="152" cy="88" rx="18" ry="12" class="body-part" data-zone="r-shoulder" fill="rgba(56,189,248,0.12)" stroke="rgba(56,189,248,0.3)"/>
-          <!-- Left Arm -->
-          <rect x="22" y="96" width="20" height="76" rx="10" class="body-part" data-zone="l-arm" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.25)"/>
-          <!-- Right Arm -->
-          <rect x="158" y="96" width="20" height="76" rx="10" class="body-part" data-zone="r-arm" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.25)"/>
-          <!-- Lower Back / Hips -->
-          <path d="M56 180 L144 180 L136 220 L64 220 Z" class="body-part active-stress" data-zone="lower-back" fill="rgba(245,158,11,0.35)" stroke="rgba(245,158,11,0.7)"/>
-          <!-- Left Upper Leg -->
-          <rect x="60" y="224" width="30" height="80" rx="12" class="body-part" data-zone="l-thigh" fill="rgba(56,189,248,0.12)" stroke="rgba(56,189,248,0.3)"/>
-          <!-- Right Upper Leg -->
-          <rect x="110" y="224" width="30" height="80" rx="12" class="body-part active-warn" data-zone="r-thigh" fill="rgba(239,68,68,0.3)" stroke="rgba(239,68,68,0.6)"/>
-          <!-- Left Lower Leg -->
-          <rect x="62" y="310" width="26" height="72" rx="10" class="body-part" data-zone="l-calf" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.25)"/>
-          <!-- Right Lower Leg -->
-          <rect x="112" y="310" width="26" height="72" rx="10" class="body-part" data-zone="r-calf" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.25)"/>
+          <path d="M122 70 Q142 68 160 80 Q164 84 162 90 L142 86 Q132 78 122 74 Z" class="body-part" data-zone="r-shoulder" fill="rgba(96,210,255,0.15)" stroke="rgba(96,210,255,0.4)"/>
+          <!-- Torso (chest + abdomen) -->
+          <path d="M78 86 L58 90 Q54 96 56 120 L60 155 Q62 168 68 178 L76 190 Q90 196 110 198 Q130 196 144 190 L152 178 Q158 168 160 155 L164 120 Q166 96 162 90 L142 86 Q132 78 122 74 L98 74 Q88 78 78 86 Z" class="body-part" data-zone="torso" fill="rgba(96,210,255,0.15)" stroke="rgba(96,210,255,0.4)"/>
+          <!-- Left Arm (upper) -->
+          <path d="M58 90 Q52 94 48 106 L42 136 Q40 142 42 148 L48 148 Q50 142 52 136 L56 112 Q58 100 62 94 Z" class="body-part" data-zone="l-arm" fill="rgba(96,210,255,0.12)" stroke="rgba(96,210,255,0.35)"/>
+          <!-- Left Forearm + Hand -->
+          <path d="M42 148 Q38 158 36 172 L34 192 Q33 200 34 206 L38 218 Q40 222 44 222 Q46 220 46 216 L44 206 Q42 198 44 190 L46 172 Q48 158 48 148 Z" class="body-part" data-zone="l-arm" fill="rgba(96,210,255,0.10)" stroke="rgba(96,210,255,0.30)"/>
+          <!-- Right Arm (upper) -->
+          <path d="M162 90 Q168 94 172 106 L178 136 Q180 142 178 148 L172 148 Q170 142 168 136 L164 112 Q162 100 158 94 Z" class="body-part" data-zone="r-arm" fill="rgba(96,210,255,0.12)" stroke="rgba(96,210,255,0.35)"/>
+          <!-- Right Forearm + Hand -->
+          <path d="M178 148 Q182 158 184 172 L186 192 Q187 200 186 206 L182 218 Q180 222 176 222 Q174 220 174 216 L176 206 Q178 198 176 190 L174 172 Q172 158 172 148 Z" class="body-part" data-zone="r-arm" fill="rgba(96,210,255,0.10)" stroke="rgba(96,210,255,0.30)"/>
+          <!-- Lower Back / Hips / Pelvis -->
+          <path d="M76 190 Q90 196 110 198 Q130 196 144 190 L148 200 Q150 210 148 218 L142 226 Q130 232 110 234 Q90 232 78 226 L72 218 Q70 210 72 200 Z" class="body-part active-stress" data-zone="lower-back" fill="rgba(255,180,50,0.40)" stroke="rgba(255,180,50,0.8)"/>
+          <!-- Left Thigh -->
+          <path d="M78 226 Q80 234 82 250 L84 280 Q86 296 88 310 L92 310 Q94 296 94 280 L94 250 Q94 234 96 226 Q90 232 78 226 Z" class="body-part" data-zone="l-thigh" fill="rgba(96,210,255,0.15)" stroke="rgba(96,210,255,0.4)"/>
+          <!-- Right Thigh -->
+          <path d="M142 226 Q140 234 138 250 L136 280 Q134 296 132 310 L128 310 Q126 296 126 280 L126 250 Q126 234 124 226 Q130 232 142 226 Z" class="body-part active-warn" data-zone="r-thigh" fill="rgba(255,90,90,0.35)" stroke="rgba(255,90,90,0.7)"/>
+          <!-- Left Knee + Shin -->
+          <path d="M84 310 L82 320 Q80 330 80 345 L80 370 Q80 378 82 385 L86 385 Q90 378 90 370 L92 345 Q92 330 92 320 L92 310 Z" class="body-part" data-zone="l-calf" fill="rgba(96,210,255,0.12)" stroke="rgba(96,210,255,0.35)"/>
+          <!-- Right Knee + Shin -->
+          <path d="M136 310 L138 320 Q140 330 140 345 L140 370 Q140 378 138 385 L134 385 Q130 378 130 370 L128 345 Q128 330 128 320 L128 310 Z" class="body-part" data-zone="r-calf" fill="rgba(96,210,255,0.12)" stroke="rgba(96,210,255,0.35)"/>
           <!-- Left Foot -->
-          <ellipse cx="75" cy="392" rx="18" ry="10" class="body-part" data-zone="l-foot" fill="rgba(56,189,248,0.08)" stroke="rgba(56,189,248,0.2)"/>
+          <path d="M82 385 L80 395 Q78 405 74 412 Q72 416 74 418 L88 418 Q92 416 90 410 L88 400 Q88 392 86 385 Z" class="body-part" data-zone="l-foot" fill="rgba(96,210,255,0.10)" stroke="rgba(96,210,255,0.30)"/>
           <!-- Right Foot -->
-          <ellipse cx="125" cy="392" rx="18" ry="10" class="body-part" data-zone="r-foot" fill="rgba(56,189,248,0.08)" stroke="rgba(56,189,248,0.2)"/>
-          
+          <path d="M138 385 L140 395 Q142 405 146 412 Q148 416 146 418 L132 418 Q128 416 130 410 L132 400 Q132 392 134 385 Z" class="body-part" data-zone="r-foot" fill="rgba(96,210,255,0.10)" stroke="rgba(96,210,255,0.30)"/>
+
           <!-- Pulse indicators on stressed areas -->
-          <circle cx="100" cy="200" r="6" class="pulse-dot warn"/>
-          <circle cx="125" cy="264" r="5" class="pulse-dot danger"/>
+          <circle cx="110" cy="210" r="6" class="pulse-dot warn"/>
+          <circle cx="132" cy="270" r="5" class="pulse-dot danger"/>
         </svg>
       </div>
 
@@ -224,10 +240,104 @@
         <p class="pod-location">📍 Rest Stop E40 — Wetteren</p>
         <p class="pod-distance">12 miles ahead · ~14 min</p>
       </div>
-      <button class="pod-reserve-btn" id="reserveBtn">
-        <span>Reserved</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-      </button>
+      <div class="pod-btn-row">
+        <button class="pod-reserve-btn" id="reserveBtn">
+          <span>Reserve Pod</span>
+          <svg class="reserve-icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg class="reserve-icon-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="pod-map-btn" id="openMapBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/></svg>
+          <span>Browse Map</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Pod Map Overlay -->
+    <div class="pod-map-overlay" id="podMapOverlay">
+      <div class="map-header">
+        <button class="map-back-btn" id="mapBackBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h3>Find a Pod</h3>
+        <span class="map-count">5 nearby</span>
+      </div>
+
+      <div class="map-area" id="mapArea">
+        <!-- Fake map background with roads -->
+        <div class="map-bg">
+          <svg viewBox="0 0 400 500" class="map-roads">
+            <path d="M0 180 Q100 160 200 200 Q300 240 400 220" stroke="rgba(92,203,255,0.15)" stroke-width="3" fill="none"/>
+            <path d="M0 300 Q80 280 160 310 Q240 340 320 320 Q360 310 400 320" stroke="rgba(92,203,255,0.12)" stroke-width="2.5" fill="none"/>
+            <path d="M120 0 Q140 120 200 200 Q260 280 240 500" stroke="rgba(92,203,255,0.12)" stroke-width="2.5" fill="none"/>
+            <path d="M300 0 Q280 100 320 200 Q360 300 340 500" stroke="rgba(92,203,255,0.08)" stroke-width="2" fill="none"/>
+            <path d="M0 420 Q150 400 200 430 Q250 460 400 440" stroke="rgba(92,203,255,0.08)" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- Current position -->
+          <div class="map-you" style="left:32%;top:36%">
+            <div class="map-you-dot"></div>
+            <span>You</span>
+          </div>
+        </div>
+
+        <!-- Pod markers -->
+        <div class="map-marker" data-pod="0" style="left:52%;top:38%">
+          <div class="marker-pin"></div>
+        </div>
+        <div class="map-marker" data-pod="1" style="left:68%;top:28%">
+          <div class="marker-pin"></div>
+        </div>
+        <div class="map-marker" data-pod="2" style="left:40%;top:58%">
+          <div class="marker-pin"></div>
+        </div>
+        <div class="map-marker" data-pod="3" style="left:75%;top:52%">
+          <div class="marker-pin"></div>
+        </div>
+        <div class="map-marker" data-pod="4" style="left:25%;top:72%">
+          <div class="marker-pin"></div>
+        </div>
+      </div>
+
+      <!-- Bottom sheet card (hidden until marker click) -->
+      <div class="map-sheet" id="mapSheet">
+        <div class="map-sheet-handle"></div>
+        <div class="map-sheet-body">
+          <div class="map-pod-header">
+            <div>
+              <h4 class="map-pod-name" id="mapPodName">VitalRoute Lounge</h4>
+              <p class="map-pod-loc" id="mapPodLoc">📍 Rest Stop E40 — Wetteren</p>
+            </div>
+            <div class="map-pod-rating" id="mapPodRating">
+              <span class="rating-stars">★★★★★</span>
+              <span class="rating-val">4.8</span>
+            </div>
+          </div>
+          <div class="map-pod-stats">
+            <div class="map-stat">
+              <span class="map-stat-val" id="mapDist">12 mi</span>
+              <span class="map-stat-lbl">Distance</span>
+            </div>
+            <div class="map-stat">
+              <span class="map-stat-val" id="mapEta">~14 min</span>
+              <span class="map-stat-lbl">ETA</span>
+            </div>
+            <div class="map-stat">
+              <span class="map-stat-val" id="mapBeds">3 free</span>
+              <span class="map-stat-lbl">Pods</span>
+            </div>
+          </div>
+          <div class="map-pod-facilities" id="mapFacilities">
+            <span class="facility-chip">💆 Massage</span>
+            <span class="facility-chip">🧘 Breathing</span>
+            <span class="facility-chip">🎨 Chromo</span>
+            <span class="facility-chip">☕ Café</span>
+          </div>
+          <button class="pod-reserve-btn map-reserve-btn" id="mapReserveBtn">
+            <span>Reserve This Pod</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Prescription Preview -->
@@ -330,7 +440,7 @@
     <div class="journey-timeline">
       <div class="j-event">
         <div class="j-time">08:00</div>
-        <div class="j-dot start"></div>
+        <div class="j-track"><div class="j-dot start"></div></div>
         <div class="j-card">
           <h4>Departed Kortrijk</h4>
           <p>All systems nominal. Wellness: 92</p>
@@ -338,7 +448,7 @@
       </div>
       <div class="j-event">
         <div class="j-time">09:45</div>
-        <div class="j-dot info"></div>
+        <div class="j-track"><div class="j-dot info"></div></div>
         <div class="j-card">
           <h4>Posture Shift Detected</h4>
           <p>Weight shifted to right hip. Monitoring…</p>
@@ -346,7 +456,7 @@
       </div>
       <div class="j-event">
         <div class="j-time">11:20</div>
-        <div class="j-dot warn"></div>
+        <div class="j-track"><div class="j-dot warn"></div></div>
         <div class="j-card">
           <h4>CO₂ Level Elevated</h4>
           <p>Cabin CO₂ at 820 ppm. Ventilation increased.</p>
@@ -354,7 +464,7 @@
       </div>
       <div class="j-event">
         <div class="j-time">12:00</div>
-        <div class="j-dot danger"></div>
+        <div class="j-track"><div class="j-dot danger"></div></div>
         <div class="j-card">
           <h4>Stress Spike — Traffic</h4>
           <p>Grip pressure ↑ 40%, heart rate 92 bpm. Pod reserved.</p>
@@ -362,7 +472,7 @@
       </div>
       <div class="j-event">
         <div class="j-time">12:15</div>
-        <div class="j-dot recovery"></div>
+        <div class="j-track"><div class="j-dot recovery"></div></div>
         <div class="j-card">
           <h4>Arriving at VitalRoute Pod</h4>
           <p>Wetteren Rest Stop. Recovery session prepared.</p>
@@ -370,7 +480,7 @@
       </div>
       <div class="j-event future">
         <div class="j-time">~13:30</div>
-        <div class="j-dot end"></div>
+        <div class="j-track"><div class="j-dot end"></div></div>
         <div class="j-card">
           <h4>Brussels (ETA)</h4>
           <p>Estimated arrival after recovery break.</p>

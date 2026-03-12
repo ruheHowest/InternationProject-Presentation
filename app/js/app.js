@@ -133,7 +133,11 @@ document.addEventListener('DOMContentLoaded', () => {
     'r-foot':      { title: 'Right Foot',     status: 'ok',   statusText: 'Normal',            dur: '—', press: '10%', lean: '—',     advice: 'No issues detected.' },
   };
 
+  const bodyTooltip = document.getElementById('bodyTooltip');
+  const bodyVisual = document.querySelector('.body-visual');
+
   bodyParts.forEach(part => {
+    // Click to update detail panel
     part.addEventListener('click', () => {
       bodyParts.forEach(p => p.classList.remove('selected'));
       part.classList.add('selected');
@@ -154,6 +158,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.querySelector('.zone-advice').textContent = data.advice;
     });
+
+    // Hover tooltip
+    part.addEventListener('mouseenter', (e) => {
+      const zone = part.dataset.zone;
+      const data = zoneData[zone];
+      if (!data || !bodyTooltip) return;
+
+      bodyTooltip.querySelector('.bt-title').textContent = data.title;
+      const statusSpan = bodyTooltip.querySelector('.bt-status');
+      statusSpan.textContent = data.statusText;
+      statusSpan.className = 'bt-status ' + data.status;
+      bodyTooltip.querySelector('.bt-pressure').textContent = 'Pressure: ' + data.press;
+      bodyTooltip.classList.add('visible');
+    });
+
+    part.addEventListener('mousemove', (e) => {
+      if (!bodyTooltip || !bodyVisual) return;
+      const rect = bodyVisual.getBoundingClientRect();
+      const x = e.clientX - rect.left + 14;
+      const y = e.clientY - rect.top - 10;
+      bodyTooltip.style.left = x + 'px';
+      bodyTooltip.style.top = y + 'px';
+    });
+
+    part.addEventListener('mouseleave', () => {
+      if (bodyTooltip) bodyTooltip.classList.remove('visible');
+    });
+
+    // Touch support for tooltip
+    part.addEventListener('touchstart', (e) => {
+      const zone = part.dataset.zone;
+      const data = zoneData[zone];
+      if (!data || !bodyTooltip || !bodyVisual) return;
+
+      bodyTooltip.querySelector('.bt-title').textContent = data.title;
+      const statusSpan = bodyTooltip.querySelector('.bt-status');
+      statusSpan.textContent = data.statusText;
+      statusSpan.className = 'bt-status ' + data.status;
+      bodyTooltip.querySelector('.bt-pressure').textContent = 'Pressure: ' + data.press;
+
+      const touch = e.touches[0];
+      const rect = bodyVisual.getBoundingClientRect();
+      bodyTooltip.style.left = (touch.clientX - rect.left + 14) + 'px';
+      bodyTooltip.style.top = (touch.clientY - rect.top - 10) + 'px';
+      bodyTooltip.classList.add('visible');
+
+      setTimeout(() => bodyTooltip.classList.remove('visible'), 2000);
+    }, { passive: true });
   });
 
 
@@ -161,18 +213,147 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.toggle').forEach(toggle => {
     toggle.addEventListener('click', () => {
       toggle.classList.toggle('active');
+
+      // Dark mode toggle
+      if (toggle.dataset.setting === 'darkmode') {
+        if (toggle.classList.contains('active')) {
+          document.documentElement.removeAttribute('data-theme');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      }
     });
   });
 
 
   // ── Reserve Button ──
   const reserveBtn = document.getElementById('reserveBtn');
+  let isReserved = false;
   if (reserveBtn) {
     reserveBtn.addEventListener('click', () => {
+      isReserved = !isReserved;
+      const label = reserveBtn.querySelector('span');
+      const checkIcon = reserveBtn.querySelector('.reserve-icon-check');
+      const arrowIcon = reserveBtn.querySelector('.reserve-icon-arrow');
+
+      if (isReserved) {
+        label.textContent = 'Reserved';
+        reserveBtn.classList.add('reserved');
+        if (checkIcon) checkIcon.style.display = '';
+        if (arrowIcon) arrowIcon.style.display = 'none';
+      } else {
+        label.textContent = 'Reserve Pod';
+        reserveBtn.classList.remove('reserved');
+        if (checkIcon) checkIcon.style.display = 'none';
+        if (arrowIcon) arrowIcon.style.display = '';
+      }
+
       const sessionCard = document.getElementById('sessionCard');
       if (sessionCard) {
-        sessionCard.classList.toggle('visible');
+        if (isReserved) {
+          sessionCard.classList.add('visible');
+        } else {
+          sessionCard.classList.remove('visible');
+        }
       }
+    });
+  }
+
+
+  // ── Pod Map Flow ──
+  const podData = [
+    { name: 'VitalRoute Lounge',    loc: '📍 Rest Stop E40 — Wetteren',     dist: '12 mi', eta: '~14 min', beds: '3 free', rating: 4.8, stars: '★★★★★', facilities: ['💆 Massage','🧘 Breathing','🎨 Chromo','☕ Café'] },
+    { name: 'ZenDrive Hub',         loc: '📍 Service Area E17 — Deinze',    dist: '18 mi', eta: '~22 min', beds: '1 free', rating: 4.5, stars: '★★★★½', facilities: ['💆 Massage','❄️ Climate','🪞 Stretches','🍽️ Diner'] },
+    { name: 'RestWell Station',     loc: '📍 Truck Park A14 — Aalter',      dist: '24 mi', eta: '~28 min', beds: '5 free', rating: 4.9, stars: '★★★★★', facilities: ['💆 Massage','🧘 Breathing','🎨 Chromo','❄️ Climate','🛁 Shower'] },
+    { name: 'RouteRevive Point',    loc: '📍 Rest Area E40 — Erpe-Mere',    dist: '8 mi',  eta: '~10 min', beds: '2 free', rating: 4.2, stars: '★★★★☆', facilities: ['💆 Massage','🧘 Breathing','☕ Café'] },
+    { name: 'TruckSpa Oasis',      loc: '📍 Service Plaza A10 — Oostkamp', dist: '32 mi', eta: '~38 min', beds: '4 free', rating: 4.7, stars: '★★★★★', facilities: ['💆 Massage','🎨 Chromo','❄️ Climate','🪞 Stretches','☕ Café','🛁 Shower'] },
+  ];
+
+  const mapOverlay   = document.getElementById('podMapOverlay');
+  const mapSheet     = document.getElementById('mapSheet');
+  const mapMarkers   = document.querySelectorAll('.map-marker');
+  const openMapBtn   = document.getElementById('openMapBtn');
+  const mapBackBtn   = document.getElementById('mapBackBtn');
+  const mapReserveBtn = document.getElementById('mapReserveBtn');
+
+  let selectedPodIdx = null;
+
+  function openMap() {
+    if (mapOverlay) mapOverlay.classList.add('open');
+  }
+
+  function closeMap() {
+    if (mapOverlay) mapOverlay.classList.remove('open');
+    if (mapSheet) mapSheet.classList.remove('visible');
+    mapMarkers.forEach(m => m.classList.remove('active'));
+    selectedPodIdx = null;
+  }
+
+  function showPodSheet(idx) {
+    const pod = podData[idx];
+    if (!pod || !mapSheet) return;
+
+    selectedPodIdx = idx;
+    mapMarkers.forEach(m => m.classList.remove('active'));
+    document.querySelector(`.map-marker[data-pod="${idx}"]`)?.classList.add('active');
+
+    document.getElementById('mapPodName').textContent = pod.name;
+    document.getElementById('mapPodLoc').textContent = pod.loc;
+    document.getElementById('mapDist').textContent = pod.dist;
+    document.getElementById('mapEta').textContent = pod.eta;
+    document.getElementById('mapBeds').textContent = pod.beds;
+
+    const ratingEl = document.getElementById('mapPodRating');
+    ratingEl.querySelector('.rating-stars').textContent = pod.stars;
+    ratingEl.querySelector('.rating-val').textContent = pod.rating;
+
+    const facEl = document.getElementById('mapFacilities');
+    facEl.innerHTML = pod.facilities.map(f => `<span class="facility-chip">${f}</span>`).join('');
+
+    mapSheet.classList.add('visible');
+  }
+
+  if (openMapBtn) openMapBtn.addEventListener('click', openMap);
+  if (mapBackBtn) mapBackBtn.addEventListener('click', closeMap);
+
+  mapMarkers.forEach(marker => {
+    marker.addEventListener('click', () => {
+      const idx = parseInt(marker.dataset.pod);
+      showPodSheet(idx);
+    });
+  });
+
+  if (mapReserveBtn) {
+    mapReserveBtn.addEventListener('click', () => {
+      if (selectedPodIdx === null) return;
+      const pod = podData[selectedPodIdx];
+
+      // Update hero card with chosen pod info
+      const heroInfo = document.querySelector('.pod-info');
+      if (heroInfo) {
+        heroInfo.querySelector('h3').textContent = pod.name;
+        heroInfo.querySelector('.pod-location').textContent = pod.loc;
+        heroInfo.querySelector('.pod-distance').textContent = pod.dist + ' ahead · ' + pod.eta;
+      }
+
+      // Mark quick-reserve button as reserved
+      if (reserveBtn) {
+        const label = reserveBtn.querySelector('span');
+        const checkIcon = reserveBtn.querySelector('.reserve-icon-check');
+        const arrowIcon = reserveBtn.querySelector('.reserve-icon-arrow');
+        label.textContent = 'Reserved';
+        reserveBtn.classList.add('reserved');
+        if (checkIcon) checkIcon.style.display = '';
+        if (arrowIcon) arrowIcon.style.display = 'none';
+        isReserved = true;
+      }
+
+      // Show session card
+      const sessionCard = document.getElementById('sessionCard');
+      if (sessionCard) sessionCard.classList.add('visible');
+
+      // Close map
+      closeMap();
     });
   }
 
