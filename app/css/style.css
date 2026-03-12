@@ -875,18 +875,19 @@ html, body {
 .pod-reserve-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  margin-top: 14px;
-  padding: 10px 20px;
+  padding: 10px 16px;
   border: 2px solid var(--accent);
   border-radius: 10px;
   background: transparent;
   color: var(--accent);
   font-family: var(--font);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  flex: 1;
 }
 
 .pod-reserve-btn:active {
@@ -912,6 +913,7 @@ html, body {
 .pod-map-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 10px 16px;
   border: 2px solid rgba(92, 203, 255, 0.25);
@@ -923,6 +925,7 @@ html, body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  flex: 1;
 }
 
 .pod-map-btn:active { transform: scale(0.96); }
