@@ -701,14 +701,17 @@
       <div class="stat-box">
         <div class="num" id="animStat1">0%</div>
         <div class="label">Driver Turnover Rate (Annual)</div>
+        <div class="label" style="font-size:.65rem;margin-top:2px;opacity:.6;">ATA Trucking Activity Report, 2024</div>
       </div>
       <div class="stat-box">
         <div class="num" id="animStat2">0hrs</div>
         <div class="label">Average Daily Sitting Time</div>
+        <div class="label" style="font-size:.65rem;margin-top:2px;opacity:.6;">FMCSA HOS Regulations</div>
       </div>
       <div class="stat-box">
         <div class="num" id="animStat3">0%</div>
         <div class="label">Report Chronic Pain</div>
+        <div class="label" style="font-size:.65rem;margin-top:2px;opacity:.6;">Int. Journal of Environmental Research, 2020</div>
       </div>
     </div>
 
@@ -1100,9 +1103,9 @@
   function animateStats() {
     if (statsAnimated) return;
     statsAnimated = true;
-    animateValue('animStat1', 0, 91, '%', 1200);
+    animateValue('animStat1', 0, 78, '%', 1200);
     animateValue('animStat2', 0, 11, 'hrs', 1000);
-    animateValue('animStat3', 0, 73, '%', 1100);
+    animateValue('animStat3', 0, 79, '%', 1100);
   }
 
   /* ── Animated Stats (Slide 8) ── */
@@ -1171,7 +1174,7 @@
         labels: ['Physical Pain', 'Mental Fatigue', 'Isolation', 'Sleep Issues', 'Job Dissatisfaction'],
         datasets: [{
           label: '% of Drivers Affected',
-          data: [73, 68, 61, 57, 52],
+          data: [79, 64, 61, 52, 52],
           backgroundColor: [
             C.red + '0.7)', C.orange + '0.7)', C.purple + '0.7)', C.cyan + '0.7)', C.green + '0.7)',
           ],
